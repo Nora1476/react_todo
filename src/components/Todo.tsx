@@ -15,7 +15,6 @@ function ToDo({ text, category, id }: IToDo) {
       const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
 
       const newToDo = { text: text, id: id, category: name as any }; //카테고리만 클릭이벤트로 받아온 name으로 대체
-
       return [...oldToDos.slice(0, targetIndex), newToDo, ...oldToDos.slice(targetIndex + 1)];
     });
   };
@@ -23,20 +22,21 @@ function ToDo({ text, category, id }: IToDo) {
     <li>
       <span>{text} </span>
       {category !== Categories.TO_DO && (
-        <button name={Categories.TO_DO + ""} onClick={onClick}>
+        <button name={Categories.TO_DO} onClick={onClick}>
           To Do
         </button>
       )}
       {category !== Categories.DOING && (
-        <button name={Categories.DOING + ""} onClick={onClick}>
+        <button name={Categories.DOING} onClick={onClick}>
           Doing
         </button>
       )}
       {category !== Categories.DONE && (
-        <button name={Categories.DONE + ""} onClick={onClick}>
+        <button name={Categories.DONE} onClick={onClick}>
           Done
         </button>
       )}
+      <button>Delete</button>
     </li>
   );
 }
