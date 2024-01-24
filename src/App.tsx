@@ -1,5 +1,8 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import TodoList from "./components/ToDoList";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { darkTheme, lightTheme } from "./theme";
+import { isDarkAtom } from "./atoms";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -57,21 +60,56 @@ body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   background-color:${(props) => props.theme.bgColor};
-  color:${(props) => props.theme.textColor};
+  color:${(props) => props.theme.textBoderColor};
+  font-size: 20px;
   line-height: 1.2;
+  
 }
 a {
   text-decoration:none;
   color:inherit;
 }
+
+#root{
+  display: flex;
+  justify-content: center;
+}
+`;
+const BtnTheme = styled.div`
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid ${(props) => props.theme.textBoderColor};
+  border-radius: 15px;
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  cursor: pointer;
+  span {
+    display: block;
+  }
 `;
 
 function App() {
+  const setDakrAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDakrAtom((prev) => !prev);
+  const isDark = useRecoilValue(isDarkAtom);
   return (
-    <>
-      <GlobalStyle />
-      <TodoList />
-    </>
+    // ThemeProvider는 styled-component의 하나의 컴포턴트 이며 속성으로 theme오브젝트 입력은 필수
+    // ThemeProvider 자식 태그는 부모요소의 객체게 접근가능하다
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <>
+        <GlobalStyle />
+        <TodoList />
+        <BtnTheme>
+          <span onClick={toggleDarkAtom} className="material-symbols-outlined">
+            {isDark ? "light_mode" : "dark_mode"}
+          </span>
+        </BtnTheme>
+      </>
+    </ThemeProvider>
   );
 }
 
